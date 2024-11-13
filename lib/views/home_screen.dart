@@ -5,10 +5,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Placeholder(),
-      ),
+    return const SingleChildScrollView(
+      child: SafeArea(
+        child: Text("dedeed"),
+      )
     );
   }
 }

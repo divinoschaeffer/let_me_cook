@@ -54,12 +54,12 @@ class MiniRecipeCard extends StatelessWidget {
               height: 80,
               child: recipe.mealThumb != null && recipe.mealThumb!.isNotEmpty
               ? Image.network(
-                  "${recipe.mealThumb}/preview", // Use the URL if available
+                  "${recipe.mealThumb}/preview",
                   width: 80.0,
                   fit: BoxFit.cover,
                 )
               : Image.asset(
-                  'assets/images/placeholder.png', // Local placeholder image
+                  'assets/images/placeholder.png',
                   width: 80.0,
                   fit: BoxFit.cover,
                 ),

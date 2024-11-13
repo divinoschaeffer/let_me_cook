@@ -48,6 +48,7 @@ class Recipe {
           Ingredient(
             name: ingredient,
             measure: measure ?? '',
+            thumb: "https://www.themealdb.com/images/ingredients/$ingredient-Small.png"
           ),
         );
       }
