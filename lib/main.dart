@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:let_me_cook/views/NavigationBar.dart';
+import 'package:let_me_cook/views/navigation_bar.dart';
 import 'repository/recipe_repository.dart';
 import 'theme/theme.dart';
 

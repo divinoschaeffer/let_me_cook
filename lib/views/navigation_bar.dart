@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:let_me_cook/views/HomeScreen.dart';
-import 'package:let_me_cook/views/LikesScreen.dart';
-import 'package:let_me_cook/views/SearchScreen.dart';
+import 'package:let_me_cook/views/home_screen.dart';
+import 'package:let_me_cook/views/likes_screen.dart';
+import 'package:let_me_cook/views/search_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_border_outlined),
+            icon: Icon(Icons.favorite),
             label: 'Likes',
           ),
           BottomNavigationBarItem(
