@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:let_me_cook/models/Ingredient.dart';
-import 'package:let_me_cook/models/recipe.dart';
+import 'package:let_me_cook/models/Recipe.dart';
 
 class FullRecipeCard extends StatelessWidget {
   final Recipe recipe;
@@ -68,9 +68,6 @@ class FullRecipeCard extends StatelessWidget {
                 ),
                 textAlign: TextAlign.start,
               ),
-              const SizedBox(
-                height: 5,
-              ),
               IngredientsList(
                 ingredients: recipe.ingredients
               ),
@@ -114,30 +111,30 @@ class IngredientsList extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 4.0,
-        crossAxisSpacing: 4.0,
-        childAspectRatio: 3
+        crossAxisCount: 1,
+        mainAxisSpacing: 1.0,
+        crossAxisSpacing: 1.0,
+        childAspectRatio: 8
       ),
       itemCount: ingredients.length,
       itemBuilder: (context, index) {
         final ingredient = ingredients[index];
-        return Container(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.network(
-                ingredient.thumb,
-                height: 25,
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.network(
+              ingredient.thumb,
+              height: 25,
+            ),
+            Text(
+              "${ingredient.measure} ${ingredient.name}",
+              style: const TextStyle(
+                fontSize: 16,
               ),
-              Text(
-                "${ingredient.measure} ${ingredient.name}",
-                maxLines: 1,
-                overflow: TextOverflow.clip,
-              )
-            ],
-          )
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            )
+          ],
         );
       },
     );

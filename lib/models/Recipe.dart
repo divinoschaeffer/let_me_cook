@@ -73,4 +73,23 @@ class Recipe {
           : null,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'idMeal': idMeal,
+      'meal': meal,
+      'drinkAlternate': drinkAlternate,
+      'category': category,
+      'area': area,
+      'instructions': instructions,
+      'mealThumb': mealThumb,
+      'tags': tags,
+      'youtube': youtube,
+      'ingredients': ingredients.map((ingredient) => ingredient.toJson()).toList(),
+      'source': source,
+      'imageSource': imageSource,
+      'creativeCommonsConfirmed': creativeCommonsConfirmed,
+      'dateModified': dateModified?.toIso8601String(),
+    };
+  }
 }

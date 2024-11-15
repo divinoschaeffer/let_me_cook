@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:let_me_cook/views/home_screen.dart';
 import 'package:let_me_cook/views/navigation_bar.dart';
 import 'repository/recipe_repository.dart';
 import 'theme/theme.dart';
@@ -16,6 +17,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       theme: AppTheme.lightTheme,
       home: const Scaffold(
+        body: HomeScreen(),
         bottomNavigationBar: HomePage(),
       ),
     );
