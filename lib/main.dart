@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:let_me_cook/views/pages/home_page.dart';
+import 'package:let_me_cook/views/widget/navigation_menu.dart';
+import 'repository/recipe_repository.dart';
+import 'theme/theme.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  MainApp({super.key});
+  final RecipeRepository recipeRepository = RecipeRepository();
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+    return MaterialApp(
+      theme: AppTheme.lightTheme,
+      home: const Scaffold(
+        body: HomePage(),
+        bottomNavigationBar: NavigationMenuWidget(),
       ),
     );
   }
