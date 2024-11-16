@@ -69,15 +69,26 @@ class MiniRecipeCard extends StatelessWidget {
                 child: SizedBox(
                   width: 80,
                   height: 80,
-                  child: recipe.mealThumb != null && recipe.mealThumb!.isNotEmpty
-                      ? Image.network(
-                          "${recipe.mealThumb}/preview",
-                          fit: BoxFit.cover,
-                        )
-                      : Image.asset(
-                          'assets/images/placeholder.png',
-                          fit: BoxFit.cover,
+                  child: Image.network(
+                    "${recipe.mealThumb}/preview",
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+                              : null,
                         ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        'assets/images/placeholder.png',
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  )
                 ),
               ),
             ],
