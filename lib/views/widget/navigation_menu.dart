@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:let_me_cook/views/home_screen.dart';
-import 'package:let_me_cook/views/likes_screen.dart';
-import "search_screen.dart";
+import 'package:let_me_cook/views/pages/home_page.dart';
+import 'package:let_me_cook/views/pages/favorites_page.dart';
+import "../pages/search_page.dart";
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class NavigationMenuWidget extends StatefulWidget {
+  const NavigationMenuWidget({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _NavigationMenuWidgetState createState() => _NavigationMenuWidgetState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _NavigationMenuWidgetState extends State<NavigationMenuWidget> {
   int _currentIndex = 0;
 
   void _onTabTapped(int index) {
@@ -26,9 +26,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     _screens.addAll([
-      const HomeScreen(),
-      const LikesScreen(),
-      const SearchScreen()
+      const HomePage(),
+      const FavoritesPage(),
+      const SearchPage()
     ]);
   }
 

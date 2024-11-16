@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:let_me_cook/models/Recipe.dart';
+import 'package:let_me_cook/models/recipe.dart';
 import 'package:let_me_cook/repository/recipe_repository.dart';
-import 'recipe_list.dart';
+import '../widget/recipe_list.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomePage> createState() => _HomePageState();
 
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomePageState extends State<HomePage> {
   late Future<List<Recipe>> _recipesFuture;
 
   Future<List<Recipe>> _fetchDailyRecipes() async {
@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return const Center(child: Text("No recipes available"));
                 } else {
-                  return RecipeList(recipes: snapshot.data!);
+                  return RecipeListWidget(recipes: snapshot.data!);
                 }
               },
             )

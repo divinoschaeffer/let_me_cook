@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import "../repository/recipe_repository.dart";
+import "../../repository/recipe_repository.dart";
 
-class RecipeSearchBar extends StatefulWidget {
-  const RecipeSearchBar({super.key});
+class RecipeSearchBarWidget extends StatefulWidget {
+  const RecipeSearchBarWidget({super.key});
 
   @override
-  State<RecipeSearchBar> createState() => _RecipeSearchBarState();
+  State<RecipeSearchBarWidget> createState() => _RecipeSearchBarWidgetState();
 }
 
-class _RecipeSearchBarState extends State<RecipeSearchBar> {
+class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
   @override
   Widget build(BuildContext context) {
     return SearchBar(

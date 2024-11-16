@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:let_me_cook/models/Ingredient.dart';
-import 'package:let_me_cook/models/Recipe.dart';
+import 'package:let_me_cook/models/ingredient.dart';
+import 'package:let_me_cook/models/recipe.dart';
 
-class FullRecipeCard extends StatelessWidget {
+class FullRecipeCardWidget extends StatelessWidget {
   final Recipe recipe;
-  const FullRecipeCard({
+  const FullRecipeCardWidget({
     required this.recipe,
     super.key
   });
@@ -32,7 +32,7 @@ class FullRecipeCard extends StatelessWidget {
             children: [
               Center(
                 child: Text(
-                  "CATEGORIE- ${recipe.category.toUpperCase()}",
+                  "CATEGORY - ${recipe.category.toUpperCase()}",
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,

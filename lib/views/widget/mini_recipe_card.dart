@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:let_me_cook/views/full_recipe_screen.dart';
-import '../models/Recipe.dart';
+import 'package:let_me_cook/views/pages/full_recipe_page.dart';
+import '../../models/recipe.dart';
+
 class MiniRecipeCard extends StatelessWidget {
   final Recipe recipe;
 
@@ -16,7 +17,7 @@ class MiniRecipeCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => FullRecipeScreen(recipe: recipe),
+            builder: (context) => FullRecipePage(recipe: recipe),
           ),
         );
       },

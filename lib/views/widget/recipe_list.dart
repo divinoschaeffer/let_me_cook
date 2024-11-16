@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:let_me_cook/models/Recipe.dart';
-import 'package:let_me_cook/views/mini_recipe_card.dart';
+import 'package:let_me_cook/models/recipe.dart';
+import 'package:let_me_cook/views/widget/mini_recipe_card.dart';
 
-class RecipeList extends StatefulWidget {
+class RecipeListWidget extends StatefulWidget {
   final List<Recipe> recipes;
 
-  const RecipeList({super.key, required this.recipes});
+  const RecipeListWidget({super.key, required this.recipes});
 
   @override
-  _RecipeListState createState() => _RecipeListState();
+  _RecipeListWidgetState createState() => _RecipeListWidgetState();
 }
 
-class _RecipeListState extends State<RecipeList> {
+class _RecipeListWidgetState extends State<RecipeListWidget> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -24,7 +24,7 @@ class _RecipeListState extends State<RecipeList> {
   }
 
   @override
-  void didUpdateWidget(covariant RecipeList oldWidget) {
+  void didUpdateWidget(covariant RecipeListWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.recipes != widget.recipes) {
       setState(() {});

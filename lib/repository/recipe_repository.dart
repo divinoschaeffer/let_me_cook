@@ -1,4 +1,4 @@
-import 'package:let_me_cook/models/Recipe.dart';
+import 'package:let_me_cook/models/recipe.dart';
 import '../data/recipe_api.dart';
 
 class RecipeRepository {
