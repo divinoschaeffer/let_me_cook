@@ -24,8 +24,21 @@ class AddToFavoritesButton extends StatelessWidget {
         currentFavorites = jsonDecode(jsonString);
       }
 
-      // Add the new recipe to the file
-      currentFavorites.add(recipe.toJson());
+      // Vérifier si la recette est déjà présente en comparant idMeal
+      bool recipeExists = currentFavorites.any((favorite) =>
+      favorite['idMeal'] == recipe.idMeal); // Vérifie si idMeal existe déjà
+
+      if (!recipeExists) {
+        // Ajouter la nouvelle recette
+        currentFavorites.add(recipe.toJson());
+
+        // Sauvegarder la liste mise à jour dans le fichier
+        await file.writeAsString(jsonEncode(currentFavorites));
+
+        print('Recipe added to favorites.');
+      } else {
+        print('Recipe is already in favorites.');
+      }
 
       // Save the new file
       await file.writeAsString(jsonEncode(currentFavorites));
