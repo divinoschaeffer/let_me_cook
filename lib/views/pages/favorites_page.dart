@@ -51,6 +51,26 @@ class _FavoritesPageState extends State<FavoritesPage> {
     }
   }
 
+  Future<void> _deleteFavorites() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final filePath = '${directory.path}/favorites.json';
+    final file = File(filePath);
+
+    if (await file.exists()) {
+      // Si le fichier existe, on l'écrase avec un tableau vide
+      await file.writeAsString('[]');
+
+      // Rafraîchir la liste des favoris après la suppression
+      setState(() {
+        _favoritesFuture = Future.value([]);
+      });
+
+      print('All favorites have been deleted.');
+    } else {
+      print('No favorites file found.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -95,7 +115,14 @@ class _FavoritesPageState extends State<FavoritesPage> {
                   }
                 },
               )
-          )
+          ),
+          ElevatedButton(
+            onPressed: _deleteFavorites,
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(double.infinity, 50),
+            ),
+            child: Text("Delete all favorites"),
+          ),
         ],
       ),
     );
