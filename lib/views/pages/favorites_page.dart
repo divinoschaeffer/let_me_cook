@@ -28,10 +28,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
     final file = File(filePath);
 
     if (await file.exists()) {
-      // Read the JSON file
       final content = await file.readAsString();
-
-      // Décoder le JSON
       final List<dynamic> jsonList = jsonDecode(content);
 
       try {
@@ -57,14 +54,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
     final file = File(filePath);
 
     if (await file.exists()) {
-      // Si le fichier existe, on l'écrase avec un tableau vide
       await file.writeAsString('[]');
-
-      // Rafraîchir la liste des favoris après la suppression
       setState(() {
         _favoritesFuture = Future.value([]);
       });
-
       print('All favorites have been deleted.');
     } else {
       print('No favorites file found.');
