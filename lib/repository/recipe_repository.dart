@@ -24,4 +24,12 @@ class RecipeRepository {
   Future<List<Recipe>> searchRecipeByArea(String area) async {
     return await _recipeApi.searchByArea(area);
   }
+
+  Future<List<String>> fetchCategories() async {
+    return await _recipeApi.fetchCategories();
+  }
+  
+  Future<List<String>> fetchAreas() async {
+    return await _recipeApi.fetchAreas();
+  }
 }

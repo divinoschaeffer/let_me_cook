@@ -18,4 +18,6 @@ dev_dependencies:
   flutter_lints: ^4.0.0
 
 flutter:
+  assets:
+    - assets/images/placeholder.png
   uses-material-design: true

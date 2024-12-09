@@ -14,8 +14,7 @@ class FullRecipeCardWidget extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          child:  recipe.mealThumb != null && recipe.mealThumb!.isNotEmpty 
-          ? Image.network(
+          child: Image.network(
               recipe.mealThumb!,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -35,10 +34,6 @@ class FullRecipeCardWidget extends StatelessWidget {
                   fit: BoxFit.cover,
                 );
               },
-            )
-          : Image.asset(
-            'assets/images/placeholder.png',
-            fit: BoxFit.cover,
           )
         ),
         Padding(
@@ -69,8 +64,9 @@ class FullRecipeCardWidget extends StatelessWidget {
                     fontSize: 28,
                     fontWeight: FontWeight.w800,
                   ),
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
                 ),
               ),
               const SizedBox(
