@@ -1,65 +1,86 @@
-import 'package:flutter/material.dart';
-import 'package:let_me_cook/models/recipe.dart';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:let_me_cook/models/recipe.dart';
 
-
-class AddToFavoritesButton extends StatelessWidget {
+class AddToFavoritesButton extends StatefulWidget {
   final Recipe recipe;
-  String jsonText = "";
 
-  AddToFavoritesButton({Key? key, required this.recipe}) : super(key: key);
+  const AddToFavoritesButton({Key? key, required this.recipe}) : super(key: key);
 
-  // Function to add the recipe to JSON file
-  Future<void> _addToFavorites() async {
+  @override
+  _AddToFavoritesButtonState createState() => _AddToFavoritesButtonState();
+}
+
+class _AddToFavoritesButtonState extends State<AddToFavoritesButton> {
+  bool _isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfFavorite();
+  }
+
+  Future<void> _checkIfFavorite() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/favorites.json');
+
+    if (await file.exists()) {
+      final jsonString = await file.readAsString();
+      final List<dynamic> currentFavorites = jsonDecode(jsonString);
+
+      // Vérifie si la recette est déjà dans les favoris
+      setState(() {
+        _isFavorite = currentFavorites.any(
+              (favorite) => favorite['idMeal'] == widget.recipe.idMeal,
+        );
+      });
+    }
+  }
+
+  Future<void> _toggleFavorite() async {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final file = File('${directory.path}/favorites.json');
-      print('${directory.path}/favorites.json');
-      // Read the current favorites from the file
+
       List<dynamic> currentFavorites = [];
       if (await file.exists()) {
         final jsonString = await file.readAsString();
         currentFavorites = jsonDecode(jsonString);
       }
 
-      // Vérifier si la recette est déjà présente en comparant idMeal
-      bool recipeExists = currentFavorites.any((favorite) =>
-      favorite['idMeal'] == recipe.idMeal); // Vérifie si idMeal existe déjà
-
-      if (!recipeExists) {
-        // Ajouter la nouvelle recette
-        currentFavorites.add(recipe.toJson());
-
-        // Sauvegarder la liste mise à jour dans le fichier
-        await file.writeAsString(jsonEncode(currentFavorites));
-
-        print('Recipe added to favorites.');
+      if (_isFavorite) {
+        currentFavorites.removeWhere(
+              (favorite) => favorite['idMeal'] == widget.recipe.idMeal,
+        );
       } else {
-        print('Recipe is already in favorites.');
+        currentFavorites.add(widget.recipe.toJson());
       }
 
-      // Save the new file
+      // Save in file
       await file.writeAsString(jsonEncode(currentFavorites));
 
-      print("The recipe was successfully added to favorites.");
+      // Update local state
+      setState(() {
+        _isFavorite = !_isFavorite;
+      });
+      print(_isFavorite
+          ? 'Recipe added to favorites.'
+          : 'Recipe removed from favorites.');
     } catch (e) {
-      print("Could not add the recipe to the favorites : $e");
+      print("Could not toggle the favorite state: $e");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ElevatedButton(
-        onPressed: _addToFavorites,
-        style: ElevatedButton.styleFrom(
-          minimumSize: Size(double.infinity, 50),
-        ),
-        child: Text("Add to favorites"),
+    return FloatingActionButton(
+      onPressed: _toggleFavorite,
+      backgroundColor: _isFavorite ? Colors.red : Colors.grey,
+      child: Icon(
+        _isFavorite ? Icons.favorite : Icons.favorite_border,
+        color: Colors.white,
       ),
     );
   }

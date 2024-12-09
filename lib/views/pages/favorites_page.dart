@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart'; // Pour récupérer le répertoire de documents
-import 'package:let_me_cook/models/recipe.dart'; // Assurez-vous que Recipe est bien importé
+import 'package:path_provider/path_provider.dart';
+import 'package:let_me_cook/models/recipe.dart';
 import '../widget/recipe_list.dart';
 
 class FavoritesPage extends StatefulWidget {
@@ -21,7 +21,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
     _loadFavorites();
   }
 
-  // Fonction pour charger le fichier JSON et le convertir en une liste de Recipe
   Future<void> _loadFavorites() async {
     final directory = await getApplicationDocumentsDirectory();
     final filePath = '${directory.path}/favorites.json';
@@ -32,7 +31,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
       final List<dynamic> jsonList = jsonDecode(content);
 
       try {
-        // Convert JSON to list
         List<Recipe> recipes = jsonList.map((json) {
           return Recipe.fromJson(json as Map<String, dynamic>);
         }).toList();

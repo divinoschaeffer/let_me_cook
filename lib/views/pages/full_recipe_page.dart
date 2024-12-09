@@ -22,12 +22,15 @@ class FullRecipePage extends StatelessWidget {
             SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: AddToFavoritesButton(recipe: recipe,)
+              child: Text(
+                "Explore the recipe and don't forget to save it if you like it!",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+              ),
             ),
           ],
         ),
       ),
+      floatingActionButton: AddToFavoritesButton(recipe: recipe),
     );
   }
-
 }
