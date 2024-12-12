@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:let_me_cook/models/recipe.dart';
 import '../../repository/recipe_repository.dart';
 
 class RecipeSearchBarWidget extends StatefulWidget {
-  const RecipeSearchBarWidget({super.key});
+  final Function(List<Recipe>) onRecipeListChanged;
+  const RecipeSearchBarWidget({
+    super.key,
+    required this.onRecipeListChanged
+  });
 
   @override
   State<RecipeSearchBarWidget> createState() => _RecipeSearchBarWidgetState();
@@ -16,6 +21,7 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
   List<String> areas = [];
   bool isLoadingAreas = false;
   String? errorMessage;
+  String currentQuery = "";
 
   @override
   void initState() {
@@ -118,6 +124,7 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
                         selectedCategory = tempSelectedCategory;
                         selectedArea = tempSelectedArea;
                       });
+                      _onSearch(currentQuery);
                     },
                     child: const Text("Apply Filters"),
                   ),
@@ -130,8 +137,30 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
     );
   }
 
-  void _onSearch(String query) {
-    RecipeRepository().searchRecipeByIngredient(query);
+  void _onSearch(String query) async {
+    List<Recipe> list;
+  
+    if (query.isEmpty) {
+      list = []; // Return empty list for empty query
+    } else if (query.length == 1) {
+      list = await RecipeRepository().searchRecipeByLetter(query);
+    } else {
+      list = await RecipeRepository().searchRecipeByIngredient(query);
+    }
+    
+    list = _filterRecipes(list);
+    widget.onRecipeListChanged(list);
+  }
+
+  List<Recipe> _filterRecipes(List<Recipe> recipes) {
+    List<Recipe> results = recipes;
+    if (selectedCategory != null) {
+      results = results.where((recipe) => selectedCategory == recipe.category).cast<Recipe>().toList();
+    }
+    if (selectedArea != null) {
+      results = results.where((recipe) => selectedArea == recipe.area).cast<Recipe>().toList();
+    }
+    return results;
   }
 
   @override
@@ -142,9 +171,14 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
           children: [
             Expanded(
               child: SearchBar(
-                hintText: 'Enter an ingredient',
+                hintText: 'Enter an ingredient or letter',
                 leading: const Icon(Icons.search),
-                onChanged: _onSearch,
+                onChanged: (query) => {
+                    setState(() {
+                      currentQuery = query;
+                    }),
+                    _onSearch(query)
+                  },
               ),
             ),
             IconButton(
@@ -166,6 +200,7 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
                       setState(() {
                         selectedCategory = null;
                       });
+                      _onSearch(currentQuery);
                     },
                   ),
                 if (selectedArea != null)
@@ -175,6 +210,7 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
                       setState(() {
                         selectedArea = null;
                       });
+                      _onSearch(currentQuery);
                     },
                   ),
               ],

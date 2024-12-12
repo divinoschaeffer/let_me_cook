@@ -14,8 +14,20 @@ class RecipeRepository {
   }
 
   Future<List<Recipe>> searchRecipeByIngredient(String ingredient) async {
-    return await _recipeApi.searchByIngredient(ingredient);
+    List<int> ids = await _recipeApi.searchByIngredient(ingredient);
+
+    List<Recipe?> recipes = await Future.wait(
+      ids.map((id) => _recipeApi.searchById(id))
+    );
+
+    List<Recipe> filteredRecipes = recipes.where((recipe) => recipe != null).cast<Recipe>().toList();
+
+    return filteredRecipes;
   }
+
+  Future<List<Recipe>> searchRecipeByLetter(String letter) async {
+    return await _recipeApi.searchByLetter(letter);
+  } 
 
   Future<List<Recipe>> searchRecipeByCategorie(String categorie) async {
     return await _recipeApi.searchByCategorie(categorie);
