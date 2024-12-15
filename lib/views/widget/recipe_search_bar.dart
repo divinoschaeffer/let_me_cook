@@ -149,6 +149,7 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
     }
     
     list = _filterRecipes(list);
+    print(list);
     widget.onRecipeListChanged(list);
   }
 
