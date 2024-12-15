@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:let_me_cook/models/recipe.dart';
 import '../../repository/recipe_repository.dart';
@@ -16,48 +17,62 @@ class RecipeSearchBarWidget extends StatefulWidget {
 class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
   String? selectedCategory;
   String? selectedArea;
+  String? selectedIngredient;
   List<String> categories = [];
   bool isLoadingCategories = false;
   List<String> areas = [];
   bool isLoadingAreas = false;
+  List<String> ingredients = [];
+  bool isLoadingIngredients = false;
   String? errorMessage;
   String currentQuery = "";
 
   @override
   void initState() {
     super.initState();
-    _loadCategoriesAndAreas();
+    _loadFilters();
   }
 
-  Future<void> _loadCategoriesAndAreas() async {
-    setState(() {
-      isLoadingCategories = true;
-      isLoadingAreas = true;
-      errorMessage = null;
-    });
+  Future<void> _loadFilters() async {
+    _setLoadingState(true);
 
     try {
-      final fetchedCategories = await RecipeRepository().fetchCategories();
-      final fetchedAreas = await RecipeRepository().fetchAreas();
+      final results = await Future.wait([
+        RecipeRepository().fetchCategories(),
+        RecipeRepository().fetchAreas(),
+        RecipeRepository().fetchIngredients(),
+      ]);
+
       setState(() {
-        categories = fetchedCategories;
-        areas = fetchedAreas;
+        categories = results[0];
+        areas = results[1];
+        ingredients = results[2];
       });
     } catch (e) {
-      setState(() {
-        errorMessage = e.toString();
-      });
+      _setErrorState(e.toString());
     } finally {
-      setState(() {
-        isLoadingCategories = false;
-        isLoadingAreas = false;
-      });
+      _setLoadingState(false);
     }
+  }
+
+  void _setLoadingState(bool isLoading) {
+    setState(() {
+      isLoadingCategories = isLoading;
+      isLoadingAreas = isLoading;
+      isLoadingIngredients = isLoading;
+    });
+  }
+
+  void _setErrorState(String? error) {
+    setState(() {
+      errorMessage = error;
+    });
   }
 
   void _openFilterDialog() {
     String? tempSelectedCategory = selectedCategory;
     String? tempSelectedArea = selectedArea;
+    String? tempSelectedIngredient = selectedIngredient;
 
     showModalBottomSheet(
       context: context,
@@ -116,6 +131,34 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
                         });
                       },
                     ),
+                    const SizedBox(height: 10),
+                    if (isLoadingAreas)
+                      const Center(child: CircularProgressIndicator())
+                    else
+                      DropdownSearch<String>(
+                        popupProps: const PopupProps.menu(
+                          showSearchBox: true, // Active la recherche
+                          searchFieldProps: TextFieldProps(
+                            decoration: InputDecoration(
+                              labelText: "Search an ingredient",
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        items: ['None', ...ingredients],
+                        dropdownDecoratorProps: const DropDownDecoratorProps(
+                          dropdownSearchDecoration: InputDecoration(
+                            labelText: "Ingredient",
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        selectedItem: tempSelectedIngredient,
+                        onChanged: (value) {
+                          setModalState(() {
+                            tempSelectedIngredient = value == 'None' ? null : value;
+                          });
+                        },
+                      ),
                   const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
@@ -123,6 +166,7 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
                       setState(() {
                         selectedCategory = tempSelectedCategory;
                         selectedArea = tempSelectedArea;
+                        selectedIngredient = tempSelectedIngredient;
                       });
                       _onSearch(currentQuery);
                     },
@@ -160,6 +204,11 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
     if (selectedArea != null && selectedArea != "None") {
       results = results.where((recipe) => selectedArea == recipe.area).cast<Recipe>().toList();
     }
+    if (selectedIngredient != null && selectedArea != "None") {
+      results = results.where((recipe) => 
+        recipe.ingredients.any((ingredient) => ingredient.name == selectedIngredient)
+      ).toList();
+    }
     return results;
   }
 
@@ -187,7 +236,7 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
             ),
           ],
         ),
-        if (selectedCategory != null || selectedArea != null)
+        if (selectedCategory != null || selectedArea != null || selectedIngredient != null)
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Wrap(
@@ -209,6 +258,16 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
                     onDeleted: () {
                       setState(() {
                         selectedArea = null;
+                      });
+                      _onSearch(currentQuery);
+                    },
+                  ),
+                if (selectedIngredient != null)
+                  Chip(
+                    label: Text("Ingredient: $selectedIngredient"),
+                    onDeleted: () {
+                      setState(() {
+                        selectedIngredient = null;
                       });
                       _onSearch(currentQuery);
                     },

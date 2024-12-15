@@ -44,4 +44,8 @@ class RecipeRepository {
   Future<List<String>> fetchAreas() async {
     return await _recipeApi.fetchAreas();
   }
+
+  Future<List<String>> fetchIngredients() async {
+    return await _recipeApi.fetchIngredients();
+  }
 }

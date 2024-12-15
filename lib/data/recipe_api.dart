@@ -174,4 +174,22 @@ class RecipeApi {
       throw Exception("Error getting categories");
     }
   }
+
+  Future<List<String>> fetchIngredients() async {
+    Uri uri = Uri.https(_baseUrl, _apiPath + _list, {_ingredient: 'list'});
+    final response = await http.get(uri);
+    if (response.statusCode == 200){
+      dynamic data = json.decode(response.body);
+      if (data['meals'] != null) {
+        List<String> areas = (data['meals'] as List).map((area) {
+          return area['strIngredient'] as String;
+        }).toList();
+        return areas;
+      } else {
+        return [];
+      }
+    } else {
+      throw Exception("Error getting categories");
+    }
+  }
 }
