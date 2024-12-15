@@ -154,10 +154,10 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
 
   List<Recipe> _filterRecipes(List<Recipe> recipes) {
     List<Recipe> results = recipes;
-    if (selectedCategory != null) {
+    if (selectedCategory != null || selectedCategory != "None") {
       results = results.where((recipe) => selectedCategory == recipe.category).cast<Recipe>().toList();
     }
-    if (selectedArea != null) {
+    if (selectedArea != null || selectedArea != "None") {
       results = results.where((recipe) => selectedArea == recipe.area).cast<Recipe>().toList();
     }
     return results;
