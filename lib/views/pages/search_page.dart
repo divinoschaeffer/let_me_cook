@@ -29,7 +29,10 @@ class _SearchPageState extends State<SearchPage> {
           RecipeSearchBarWidget(
             onRecipeListChanged: updateRecipeList,
           ),
-          Expanded(child: RecipeListWidget(recipes: recipeList))
+          Expanded(child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: RecipeListWidget(recipes: recipeList),
+          ))
         ],
       ),
     );
