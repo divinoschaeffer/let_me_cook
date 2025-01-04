@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   late Future<List<Recipe>> _recipesFuture;
 
   Future<List<Recipe>> _fetchDailyRecipes() async {
-    return await RecipeRepository().getMultipleRandomRecipe(10);
+    return await RecipeRepository().getMultipleRandomRecipe(1);
   }
 
   @override
@@ -68,7 +68,25 @@ class _HomePageState extends State<HomePage> {
                 }
               },
             )
-          )
+          ),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _recipesFuture = _fetchDailyRecipes();
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              child: const Text("Get a new random recipe"),
+            ),
+          ),
         ],
       ),
     );
