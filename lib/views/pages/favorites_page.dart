@@ -46,22 +46,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
     }
   }
 
-  Future<void> _deleteFavorites() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final filePath = '${directory.path}/favorites.json';
-    final file = File(filePath);
-
-    if (await file.exists()) {
-      await file.writeAsString('[]');
-      setState(() {
-        _favoritesFuture = Future.value([]);
-      });
-      print('All favorites have been deleted.');
-    } else {
-      print('No favorites file found.');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
