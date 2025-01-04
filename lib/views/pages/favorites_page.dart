@@ -110,13 +110,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
                 },
               )
           ),
-          ElevatedButton(
-            onPressed: _deleteFavorites,
-            style: ElevatedButton.styleFrom(
-              minimumSize: Size(double.infinity, 50),
-            ),
-            child: Text("Delete all favorites"),
-          ),
         ],
       ),
     );
