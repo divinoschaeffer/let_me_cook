@@ -15,7 +15,6 @@ class _HomePageState extends State<HomePage> {
   late Future<List<Recipe>> _recipesFuture;
 
   Future<List<Recipe>> _fetchDailyRecipes() async {
-    print(1);
     return await RecipeRepository().getMultipleRandomRecipe(10);
   }
 
