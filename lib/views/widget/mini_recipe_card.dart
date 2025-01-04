@@ -4,10 +4,12 @@ import '../../models/recipe.dart';
 
 class MiniRecipeCard extends StatelessWidget {
   final Recipe recipe;
+  final VoidCallback? onFavoritesChanged;
 
   const MiniRecipeCard({
     super.key,
     required this.recipe,
+    this.onFavoritesChanged,
   });
 
   @override
@@ -19,7 +21,11 @@ class MiniRecipeCard extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => FullRecipePage(recipe: recipe),
           ),
-        );
+        ).then((result) {
+          if (result == true) {
+            onFavoritesChanged?.call();
+          }
+        });
       },
       child: Card(
         margin: const EdgeInsets.all(8.0),
