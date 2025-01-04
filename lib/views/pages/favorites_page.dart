@@ -88,7 +88,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                   } else {
                     return RecipeListWidget(
                       recipes: snapshot.data!,
-                      onFavoritesChanged: _loadFavorites, // Passez la méthode pour recharger les favoris
+                      onFavoritesChanged: _loadFavorites,
                     );
                   }
                 },
