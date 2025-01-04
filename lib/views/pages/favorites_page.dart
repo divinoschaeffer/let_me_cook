@@ -102,7 +102,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Center(child: Text("No recipes available"));
                   } else {
-                    return RecipeListWidget(recipes: snapshot.data!);
+                    return RecipeListWidget(
+                      recipes: snapshot.data!,
+                      onFavoritesChanged: _loadFavorites, // Passez la méthode pour recharger les favoris
+                    );
                   }
                 },
               )
