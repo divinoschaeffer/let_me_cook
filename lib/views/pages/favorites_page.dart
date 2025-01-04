@@ -13,7 +13,7 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class _FavoritesPageState extends State<FavoritesPage> {
-  late Future<List<Recipe>> _favoritesFuture;
+  late Future<List<Recipe>> _favoritesFuture = Future.value([]);
 
   @override
   void initState() {
