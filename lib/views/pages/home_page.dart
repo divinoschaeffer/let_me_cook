@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
             height: MediaQuery.of(context).size.height * 0.05
           ),
           const Text(
-            "DAYLY RECIPES",
+            "DAILY RECIPES",
             style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w700,

@@ -4,8 +4,9 @@ import 'package:let_me_cook/views/widget/mini_recipe_card.dart';
 
 class RecipeListWidget extends StatefulWidget {
   final List<Recipe> recipes;
+  final VoidCallback? onFavoritesChanged;
 
-  const RecipeListWidget({super.key, required this.recipes});
+  const RecipeListWidget({super.key, required this.recipes, this.onFavoritesChanged,});
 
   @override
   _RecipeListWidgetState createState() => _RecipeListWidgetState();
@@ -18,7 +19,7 @@ class _RecipeListWidgetState extends State<RecipeListWidget> {
       itemCount: widget.recipes.length,
       itemBuilder: (context, index) {
         final recipe = widget.recipes[index];
-        return MiniRecipeCard(recipe: recipe);
+        return MiniRecipeCard(recipe: recipe, onFavoritesChanged: widget.onFavoritesChanged);
       },
     );
   }

@@ -55,21 +55,21 @@ class Recipe {
     }
 
     return Recipe(
-      idMeal: json['idMeal'],
-      meal: json['strMeal'],
-      drinkAlternate: json['strDrinkAlternate'],
-      category: json['strCategory'],
-      area: json['strArea'],
-      instructions: json['strInstructions'],
-      mealThumb: json['strMealThumb'],
-      tags: json['strTags'],
-      youtube: json['strYoutube'],
-      ingredients: ingredients,
-      source: json['strSource'],
-      imageSource: json['strImageSource'],
-      creativeCommonsConfirmed: json['strCreativeCommonsConfirmed'],
+      idMeal: json['idMeal'] ?? '', // Valeur par défaut pour éviter les null
+      meal: json['strMeal'] ?? json['meal'], // Valeur par défaut
+      drinkAlternate: json['strDrinkAlternate'] ?? json['drinkAlternate'], // Nullable
+      category: json['strCategory'] ?? json['category'], // Valeur par défaut
+      area: json['strArea'] ??  json['area'] , // Valeur par défaut
+      instructions: json['strInstructions'] ?? json['instructions'], // Valeur par défaut
+      mealThumb: json['strMealThumb'] ?? json['mealThumb'], // Nullable
+      tags: json['strTags'] ?? json['tags'], // Nullable
+      youtube: json['strYoutube'] ?? json['youtube'], // Nullable
+      ingredients: ingredients, // Liste construite
+      source: json['strSource'], // Nullable
+      imageSource: json['strImageSource'] ?? json['imageSource'], // Nullable
+      creativeCommonsConfirmed: json['strCreativeCommonsConfirmed'] ?? json['creativeCommonsConfirmed'], // Nullable
       dateModified: json['dateModified'] != null
-          ? DateTime.parse(json['dateModified'])
+          ? DateTime.tryParse(json['dateModified']) // Conversion sécurisée
           : null,
     );
   }
