@@ -15,7 +15,6 @@ class _HomePageState extends State<HomePage> {
   late Future<List<Recipe>> _recipesFuture;
 
   Future<List<Recipe>> _fetchDailyRecipes() async {
-    print(1);
     return await RecipeRepository().getMultipleRandomRecipe(10);
   }
 
@@ -47,7 +46,7 @@ class _HomePageState extends State<HomePage> {
             height: MediaQuery.of(context).size.height * 0.05
           ),
           const Text(
-            "DAYLY RECIPES",
+            "DAILY RECIPES",
             style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w700,

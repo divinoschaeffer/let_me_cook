@@ -11,11 +11,16 @@ dependencies:
     sdk: flutter
   http: ^1.2.2
   google_fonts: ^6.2.1
+  path_provider: ^2.0.10
+  dropdown_search: ^5.0.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  change_app_package_name: ^1.4.0
 
 flutter:
+  assets:
+    - assets/images/placeholder.png
   uses-material-design: true
