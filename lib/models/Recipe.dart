@@ -55,19 +55,19 @@ class Recipe {
     }
 
     return Recipe(
-      idMeal: json['idMeal'] ?? '', // Valeur par défaut pour éviter les null
-      meal: json['strMeal'] ?? json['meal'], // Valeur par défaut
-      drinkAlternate: json['strDrinkAlternate'] ?? json['drinkAlternate'], // Nullable
-      category: json['strCategory'] ?? json['category'], // Valeur par défaut
-      area: json['strArea'] ??  json['area'] , // Valeur par défaut
-      instructions: json['strInstructions'] ?? json['instructions'], // Valeur par défaut
-      mealThumb: json['strMealThumb'] ?? json['mealThumb'], // Nullable
-      tags: json['strTags'] ?? json['tags'], // Nullable
-      youtube: json['strYoutube'] ?? json['youtube'], // Nullable
-      ingredients: ingredients, // Liste construite
-      source: json['strSource'], // Nullable
-      imageSource: json['strImageSource'] ?? json['imageSource'], // Nullable
-      creativeCommonsConfirmed: json['strCreativeCommonsConfirmed'] ?? json['creativeCommonsConfirmed'], // Nullable
+      idMeal: json['idMeal'],
+      meal: json['strMeal'],
+      drinkAlternate: json['strDrinkAlternate'],
+      category: json['strCategory'],
+      area: json['strArea'],
+      instructions: json['strInstructions'],
+      mealThumb: json['strMealThumb'],
+      tags: json['strTags'],
+      youtube: json['strYoutube'],
+      ingredients: ingredients,
+      source: json['strSource'],
+      imageSource: json['strImageSource'],
+      creativeCommonsConfirmed: json['strCreativeCommonsConfirmed'],
       dateModified: json['dateModified'] != null
           ? DateTime.tryParse(json['dateModified']) // Conversion sécurisée
           : null,
@@ -75,21 +75,29 @@ class Recipe {
   }
 
   Map<String, dynamic> toJson() {
-    return {
+    final Map<String, dynamic> json = {
       'idMeal': idMeal,
-      'meal': meal,
-      'drinkAlternate': drinkAlternate,
-      'category': category,
-      'area': area,
-      'instructions': instructions,
-      'mealThumb': mealThumb,
-      'tags': tags,
-      'youtube': youtube,
-      'ingredients': ingredients.map((ingredient) => ingredient.toJson()).toList(),
-      'source': source,
-      'imageSource': imageSource,
-      'creativeCommonsConfirmed': creativeCommonsConfirmed,
-      'dateModified': dateModified?.toIso8601String(),
+      'strMeal': meal,
+      'strDrinkAlternate': drinkAlternate,
+      'strCategory': category,
+      'strArea': area,
+      'strInstructions': instructions,
+      'strMealThumb': mealThumb,
+      'strTags': tags,
+      'strYoutube': youtube,
+      'strSource': source,
+      'strImageSource': imageSource,
+      'strCreativeCommonsConfirmed': creativeCommonsConfirmed,
+      'strDateModified': dateModified?.toIso8601String(),
     };
+
+    for (int i = 0; i < ingredients.length; i++) {
+      final ingredient = ingredients[i];
+      json['strIngredient${i + 1}'] = ingredient.name;
+      json['strMeasure${i + 1}'] = ingredient.measure;
+    }
+
+    return json;
   }
+
 }
