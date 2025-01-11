@@ -8,12 +8,4 @@ class Ingredient {
     required this.measure,
     required this.thumb,
   });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'measure': measure,
-      'thumb': thumb,
-    };
-  }
 }
