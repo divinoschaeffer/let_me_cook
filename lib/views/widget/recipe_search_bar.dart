@@ -5,13 +5,14 @@ import '../../repository/recipe_repository.dart';
 
 class RecipeSearchBarWidget extends StatefulWidget {
   final Function(List<Recipe>) onRecipeListChanged;
+
   const RecipeSearchBarWidget({
     super.key,
-    required this.onRecipeListChanged
+    required this.onRecipeListChanged,
   });
 
   @override
-  State<RecipeSearchBarWidget> createState() => _RecipeSearchBarWidgetState();
+  _RecipeSearchBarWidgetState createState() => _RecipeSearchBarWidgetState();
 }
 
 class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
@@ -35,7 +36,6 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
 
   Future<void> _loadFilters() async {
     _setLoadingState(true);
-
     try {
       final results = await Future.wait([
         RecipeRepository().fetchCategories(),
@@ -90,75 +90,38 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
-                  if (isLoadingCategories)
-                    const Center(child: CircularProgressIndicator())
-                  else if (errorMessage != null)
-                    Center(child: Text("Error: $errorMessage"))
-                  else if (categories.isNotEmpty)
-                    DropdownButtonFormField<String>(
-                      value: tempSelectedCategory,
-                      items: ['None', ...categories]
-                          .map((category) => DropdownMenuItem(
-                                value: category == 'None' ? null : category,
-                                child: Text(category),
-                              ))
-                          .toList(),
-                      decoration: const InputDecoration(labelText: "Category"),
-                      onChanged: (value) {
-                        setModalState(() {
-                          tempSelectedCategory = value;
-                        });
-                      },
-                    )
-                  else
-                    const Center(child: Text("No categories available")),
+                  _buildSearchDropdown(
+                    label: "Category",
+                    isLoading: isLoadingCategories,
+                    errorMessage: errorMessage,
+                    items: categories,
+                    selectedValue: tempSelectedCategory,
+                    onChanged: (value) => setModalState(() {
+                      tempSelectedCategory = value;
+                    }),
+                  ),
                   const SizedBox(height: 10),
-                  if (isLoadingAreas)
-                    const Center(child: CircularProgressIndicator())
-                  else
-                    DropdownButtonFormField<String>(
-                      value: tempSelectedArea,
-                      items: ['None', ...areas]
-                          .map((area) => DropdownMenuItem(
-                                value: area == 'None' ? null : area,
-                                child: Text(area),
-                              ))
-                          .toList(),
-                      decoration: const InputDecoration(labelText: "Area"),
-                      onChanged: (value) {
-                        setModalState(() {
-                          tempSelectedArea = value;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 10),
-                    if (isLoadingAreas)
-                      const Center(child: CircularProgressIndicator())
-                    else
-                      DropdownSearch<String>(
-                        popupProps: const PopupProps.menu(
-                          showSearchBox: true, // Active la recherche
-                          searchFieldProps: TextFieldProps(
-                            decoration: InputDecoration(
-                              labelText: "Search an ingredient",
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                        ),
-                        items: ['None', ...ingredients],
-                        dropdownDecoratorProps: const DropDownDecoratorProps(
-                          dropdownSearchDecoration: InputDecoration(
-                            labelText: "Ingredient",
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                        selectedItem: tempSelectedIngredient,
-                        onChanged: (value) {
-                          setModalState(() {
-                            tempSelectedIngredient = value == 'None' ? null : value;
-                          });
-                        },
-                      ),
+                  _buildSearchDropdown(
+                    label: "Area",
+                    isLoading: isLoadingAreas,
+                    items: areas,
+                    selectedValue: tempSelectedArea,
+                    onChanged: (value) => setModalState(() {
+                      tempSelectedArea = value;
+                    }),
+                  ),
+                  const SizedBox(height: 10),
+                  _buildSearchDropdown(
+                    label: "Ingredient",
+                    isLoading: isLoadingIngredients,
+                    items: ingredients,
+                    selectedValue: tempSelectedIngredient,
+                    onChanged: (value) {
+                      setModalState(() {
+                        tempSelectedIngredient = value == 'None' ? null : value;
+                      });
+                    },
+                  ),
                   const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
@@ -181,34 +144,73 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
     );
   }
 
+  Widget _buildSearchDropdown({
+    required String label,
+    required bool isLoading,
+    String? errorMessage,
+    required List<String> items,
+    required String? selectedValue,
+    required void Function(String?) onChanged,
+  }) {
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (errorMessage != null) {
+      return Center(child: Text("Error: $errorMessage"));
+    } else if (items.isEmpty) {
+      return const Center(child: Text("No items available"));
+    }
+
+    return DropdownSearch<String>(
+      popupProps: PopupProps.menu(
+        showSearchBox: true,
+        searchFieldProps: TextFieldProps(
+          decoration: InputDecoration(
+            labelText: "Search $label",
+            border: const OutlineInputBorder(),
+          ),
+        ),
+      ),
+      items: ['None', ...items],
+      dropdownDecoratorProps: DropDownDecoratorProps(
+        dropdownSearchDecoration: InputDecoration(
+          labelText: label,
+          border: const OutlineInputBorder(),
+        ),
+      ),
+      selectedItem: selectedValue,
+      onChanged: onChanged,
+    );
+  }
+
   void _onSearch(String query) async {
     List<Recipe> list;
-  
+
     if (query.isEmpty) {
-      list = []; // Return empty list for empty query
+      list = [];
     } else if (query.length == 1) {
       list = await RecipeRepository().searchRecipeByLetter(query);
     } else {
       list = await RecipeRepository().searchRecipeByIngredient(query);
     }
-    
+
     list = _filterRecipes(list);
     widget.onRecipeListChanged(list);
   }
 
   List<Recipe> _filterRecipes(List<Recipe> recipes) {
     List<Recipe> results = recipes;
+
     if (selectedCategory != null && selectedCategory != "None") {
-      results = results.where((recipe) => selectedCategory == recipe.category).cast<Recipe>().toList();
+      results = results.where((recipe) => selectedCategory == recipe.category).toList();
     }
     if (selectedArea != null && selectedArea != "None") {
-      results = results.where((recipe) => selectedArea == recipe.area).cast<Recipe>().toList();
+      results = results.where((recipe) => selectedArea == recipe.area).toList();
     }
-    if (selectedIngredient != null && selectedArea != "None") {
-      results = results.where((recipe) => 
-        recipe.ingredients.any((ingredient) => ingredient.name == selectedIngredient)
-      ).toList();
+    if (selectedIngredient != null && selectedIngredient != "None") {
+      results = results.where((recipe) =>
+          recipe.ingredients.any((ingredient) => ingredient.name == selectedIngredient)).toList();
     }
+
     return results;
   }
 
@@ -222,12 +224,12 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
               child: SearchBar(
                 hintText: 'Enter an ingredient or letter',
                 leading: const Icon(Icons.search),
-                onChanged: (query) => {
-                    setState(() {
-                      currentQuery = query;
-                    }),
-                    _onSearch(query)
-                  },
+                onChanged: (query) {
+                  setState(() {
+                    currentQuery = query;
+                  });
+                  _onSearch(query);
+                },
               ),
             ),
             IconButton(
@@ -243,39 +245,37 @@ class _RecipeSearchBarWidgetState extends State<RecipeSearchBarWidget> {
               spacing: 8.0,
               children: [
                 if (selectedCategory != null)
-                  Chip(
-                    label: Text("Cat: $selectedCategory"),
-                    onDeleted: () {
-                      setState(() {
-                        selectedCategory = null;
-                      });
-                      _onSearch(currentQuery);
-                    },
-                  ),
+                  _buildFilterChip("Category: $selectedCategory", () {
+                    setState(() {
+                      selectedCategory = null;
+                    });
+                    _onSearch(currentQuery);
+                  }),
                 if (selectedArea != null)
-                  Chip(
-                    label: Text("Area: $selectedArea"),
-                    onDeleted: () {
-                      setState(() {
-                        selectedArea = null;
-                      });
-                      _onSearch(currentQuery);
-                    },
-                  ),
+                  _buildFilterChip("Area: $selectedArea", () {
+                    setState(() {
+                      selectedArea = null;
+                    });
+                    _onSearch(currentQuery);
+                  }),
                 if (selectedIngredient != null)
-                  Chip(
-                    label: Text("Ingredient: $selectedIngredient"),
-                    onDeleted: () {
-                      setState(() {
-                        selectedIngredient = null;
-                      });
-                      _onSearch(currentQuery);
-                    },
-                  ),
+                  _buildFilterChip("Ingredient: $selectedIngredient", () {
+                    setState(() {
+                      selectedIngredient = null;
+                    });
+                    _onSearch(currentQuery);
+                  }),
               ],
             ),
           ),
       ],
+    );
+  }
+
+  Widget _buildFilterChip(String label, VoidCallback onDeleted) {
+    return Chip(
+      label: Text(label),
+      onDeleted: onDeleted,
     );
   }
 }
