@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../models/recipe.dart';
 import '../widget/full_recipe_card.dart';
 import '../widget/add_fav_button.dart';
+import '../widget/share_recipe_button.dart';
 
 class FullRecipePage extends StatefulWidget {
   final Recipe recipe;
@@ -48,9 +49,16 @@ class _FullRecipePageState extends State<FullRecipePage> {
             ],
           ),
         ),
-        floatingActionButton: AddToFavoritesButton(
-          recipe: widget.recipe,
-          onFavoriteChanged: _onFavoriteToggled,
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            ShareRecipeButton(recipe: widget.recipe), // Bouton de partage
+            SizedBox(height: 10), // Espacement entre les boutons
+            AddToFavoritesButton(
+              recipe: widget.recipe,
+              onFavoriteChanged: _onFavoriteToggled,
+            ), // Bouton d'ajout aux favoris
+          ],
         ),
       ),
     );
