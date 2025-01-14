@@ -16,6 +16,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: AppTheme.lightTheme,
+      debugShowCheckedModeBanner: false,
       home: const SafeArea(
         child: Scaffold(
           body: HomePage(),
