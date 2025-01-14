@@ -85,6 +85,7 @@ class _AddToFavoritesButtonState extends State<AddToFavoritesButton> {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      heroTag: "favorite",
       onPressed: _toggleFavorite,
       backgroundColor: _isFavorite ? Colors.red : Colors.grey,
       child: Icon(

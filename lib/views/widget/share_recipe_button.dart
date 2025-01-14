@@ -6,15 +6,15 @@ class ShareRecipeButton extends StatelessWidget {
   final Recipe recipe;
 
   const ShareRecipeButton({
-    Key? key,
+    super.key,
     required this.recipe,
-  }) : super(key: key);
+  });
 
   void _shareRecipe(BuildContext context) {
     try {
       if (recipe.meal.isEmpty || recipe.ingredients.isEmpty || recipe.instructions.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Unable to share recipe: Missing essential information.')),
+          const SnackBar(content: Text('Unable to share recipe: Missing essential information.')),
         );
         return;
       }
@@ -45,6 +45,7 @@ Enjoy your meal!
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      heroTag: "share",
       onPressed: () => _shareRecipe(context),
       backgroundColor: Colors.blue,
       child: const Icon(
