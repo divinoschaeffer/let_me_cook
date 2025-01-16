@@ -1,4 +1,4 @@
-package com.grailleunmax.let_me_cook
+package com.let_me_cook.grailleunmax
 
 import io.flutter.embedding.android.FlutterActivity
 
